@@ -1,0 +1,19 @@
+Part 2
+
+Migrations
+	In order to make migrations whenever change takes place, migrations.yaml is created with following command to migrate automatically: 
+	
+	command: ["/bin/sh", "-C"]
+        args: ['python3 manage.py makemigrations && python3 manage.py migrate']
+        
+        migrations.yaml contains all environment variables for successful migration and connection to database.
+        
+        Then, Dockerfile is added in part2 directory referencing Dockerfile from db directory. Line 5 is commented out as it performs migrations and seeding together. Afterwards, run the following command to apply Kubernetes job to perform migrations: kubectl apply -f part2/migrations.yaml
+	
+Seeding
+	After migration, seeding.sql is created referencing setup.sql in db directory. seeding.sql runs LOAD to populate database without creating one. In Dockerfile from db directory, following is added: COPY ./seeding.sql /docker-entrypoint-initdb.d/seeding.sql . Then, seeding.yaml is created with following command to access database: 
+	
+	command: ["/bin/sh", "-c"]
+        args: ["mysql --user=root --password=${MYSQL_ROOT_PASSWORD} --database=${MYSQL_DATABASE} --host=${MYSQL_HOST} -f < /docker-entrypoint-initdb.seeding.sql"]
+        
+        Afterwards, run the following command to apply Kubernetes job to perform seeding: kubectl apply -f part2/seeding.yaml
