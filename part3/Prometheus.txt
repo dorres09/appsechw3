@@ -1,0 +1,20 @@
+Part 3
+
+Part 3.1
+	Deleted the following as it exposes password in views.py:
+		
+		if pword not in graphs.keys():
+        		graphs[pword] = Counter(f'counter_{pword}', 'The total number of '\
+       	 	  + f'times {pword} was used')
+       	 graphs[pword].inc()
+       	 
+Part 3.2
+	The following is added under # Prometheus stuff! in line 16 of views.py:
+		
+		graphs['database_error_return_404'] = Counter('database_error_return_404', 'The Total number'\
+		  + ' of 404 messages.')
+		  
+	Also, graphs['database_error_return_404'].inc() is added above every line that has return HttpResponse("Error 404: Internal Server Error")
+	
+Part 3.3
+	I was not able to complete part 3.3 as my VM crashed and erased all my work just few hours before the deadline.
